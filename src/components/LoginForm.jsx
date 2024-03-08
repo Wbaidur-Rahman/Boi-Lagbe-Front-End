@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useHistory to redirect after successful login
 import LoginUser from "../assets/images/LoginUser.png";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 import "../styles/LoginModule.css";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const navigate = useNavigate(); // Initialize useHistory hook
 
   const handleLogin = (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -17,15 +22,30 @@ export default function LoginForm() {
 
     // Make an HTTP POST request to your server endpoint
     axios
-      .get("http://localhost:5000/users", formData)
+      .post(`${apiUrl}/login`, formData)
       .then((response) => {
-        console.log("Form data submitted successfully:", response.data);
-        // Optionally, you can handle success response here (e.g., show a success message)
+        console.log("Login Successful:", response.data, response.headers);
+
+        // // Extract token from the response
+        const token = response.data.cookie.token;
+        const name = response.data.cookie.name;
+
+        // // Set the token as a cookie
+        document.cookie = `${name}=${token}; max-age=${response.data.cookie.maxAge}; path=/`;
+
+        // Redirect to the desired page after successful login
+        navigate("/"); // Assuming "/dashboard" is the URL of th
       })
       .catch((error) => {
-        console.log(error);
-        // console.error("Error submitting form data:", error);
-        // Optionally, you can handle error response here (e.g., show an error message)
+        console.log(error.response.data.errors);
+        const errors = error.response.data.errors;
+        setLoginError(
+          errors.email
+            ? errors.email.msg
+            : errors.password
+            ? errors.password.msg
+            : errors.common.msg
+        );
       });
   };
   return (
@@ -39,16 +59,22 @@ export default function LoginForm() {
             type="text"
             placeholder="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setLoginError("");
+            }}
           />
         </ul>
-        <ul>
+        <ul style={{ flexDirection: "column" }}>
           <input
             type="password"
             placeholder="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value), setLoginError("");
+            }}
           />
+          <span style={{ color: "red" }}>{loginError}</span>
         </ul>
         <ul>
           <button type="submit">Login</button>

@@ -56,9 +56,10 @@ export default function SignupForm() {
         });
 
         // Clear form fields (optional)
-        // setName("");
-        // setEmail("");
-        // setPassword("");
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
       })
       .catch((error) => {
         const errors = error.response.data.errors;

@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "NODE_ENV=development nodemon app",
+    "dev": "NODE_ENV=development vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -12,6 +13,7 @@
   "dependencies": {
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-bootstrap-icons": "^1.11.3",
