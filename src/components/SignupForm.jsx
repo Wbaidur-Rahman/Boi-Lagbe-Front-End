@@ -5,10 +5,13 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddUserIcon from "../assets/images/createAccountIcon.png";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [address, setAddress] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [checkForPassword, setCheckForPassword] = useState(false);
   const [agreed, setAgreed] = useState(false); // State variable for checkbox
@@ -16,6 +19,7 @@ export default function SignupForm() {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -43,11 +47,12 @@ export default function SignupForm() {
       name: name,
       email: email,
       password: password,
+      address: address,
     };
 
     // Make an HTTP POST request to your server endpoint
     axios
-      .post("http://localhost:5000/users", formData)
+      .post(`${apiUrl}/users`, formData)
       .then((response) => {
         toast.success(response.data.msg, {
           position: "top-center",
@@ -60,6 +65,7 @@ export default function SignupForm() {
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+        setAddress("");
       })
       .catch((error) => {
         const errors = error.response.data.errors;
@@ -73,6 +79,9 @@ export default function SignupForm() {
         }
         if (errors.password) {
           setPasswordError(errors.password.msg);
+        }
+        if (errors.address) {
+          setAddressError(errors.address.msg);
         }
       });
   }
@@ -112,6 +121,18 @@ export default function SignupForm() {
             }}
           />
           {emailError && <span>{emailError}</span>}
+        </ul>
+        <ul>
+          <input
+            type="text"
+            placeholder="Enter address"
+            value={address}
+            onChange={(e) => {
+              setAddress(e.target.value);
+              setAddressError("");
+            }}
+          />
+          {addressError && <span>{addressError}</span>}
         </ul>
         <ul>
           <input
