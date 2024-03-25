@@ -1,8 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/UserPageBodyModule.css";
+
+import { ToastContainer } from "react-toastify";
+import AddCartBook from "./AddcartBook";
+import DeleteBook from "./DeleteBook";
+import RemoveFromCart from "./RemoveFromCart";
+import RentTheBook from "./RentTheBook";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -10,11 +15,13 @@ export default function Book({ bookid, user, parent }) {
   const [book, setBook] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
+  // fetching a book from api
   useEffect(() => {
     async function fetchBook() {
       try {
         const response = await axios.get(`${apiUrl}/books?id=${bookid}`);
         setBook(response.data.book);
+        // console.log(book);
       } catch (error) {
         console.log(error.response.data.errors);
       }
@@ -22,45 +29,14 @@ export default function Book({ bookid, user, parent }) {
     fetchBook();
   }, [bookid]);
 
+  // showing the pop up window
   const togglePopup = () => {
     setShowPopup(!showPopup);
   };
 
-  async function onUpdate({ updatedUser, bookid }) {
-    try {
-      // deleting the book
-      const response1 = await axios.delete(`${apiUrl}/books/${bookid}`);
-      console.log(response1.data);
-
-      // removing book from user
-      const response = await axios.put(
-        `${apiUrl}/users/${user._id}`,
-        updatedUser
-      );
-
-      if (response.data) {
-        toast.success(response.data.msg, {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-        });
-      }
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  }
-
-  // purpose is to remove userbook
-  const removeUserBook = () => {
-    const updatedUser = {
-      ...user,
-      books: user.books.filter((id) => id !== bookid),
-    };
-    onUpdate({ updatedUser, bookid });
-  };
-
   return (
-    <>
+    <div>
+      <ToastContainer />
       <div id="book">
         {book && (
           <>
@@ -90,7 +66,32 @@ export default function Book({ bookid, user, parent }) {
                     <p>PageType: {book.data.pagetype}</p>
 
                     {parent === "userbooks" && (
-                      <button onClick={removeUserBook}>Delete</button>
+                      <DeleteBook
+                        user={user}
+                        bookid={bookid}
+                        setShowPopup={setShowPopup}
+                      />
+                    )}
+                    {parent === "adcartbooks" && (
+                      <RemoveFromCart
+                        user={user}
+                        bookid={bookid}
+                        setShowPopup={setShowPopup}
+                      />
+                    )}
+                    {user && parent === "HomePage" && (
+                      <RentTheBook
+                        user={user}
+                        bookid={bookid}
+                        setShowPopup={setShowPopup}
+                      />
+                    )}
+                    {user && parent === "HomePage" && (
+                      <AddCartBook
+                        user={user}
+                        bookid={bookid}
+                        setShowPopup={setShowPopup}
+                      />
                     )}
                   </div>
                 </div>
@@ -99,6 +100,6 @@ export default function Book({ bookid, user, parent }) {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }

@@ -24,16 +24,10 @@ export default function LoginForm() {
     axios
       .post(`${apiUrl}/login`, formData)
       .then((response) => {
-        // Extract token from the response
-        const token = response.data.cookie.token;
-        const name = response.data.cookie.name;
         const userid = response.data.userObject.userid;
 
-        // Set the token as a cookie
-        document.cookie = `${name}=${token}; max-age=${response.data.cookie.maxAge}; path=/`;
-
         // Redirect to the desired page after successful login
-        navigate(`/user?id=${userid}`); // Assuming "/dashboard" is the URL of th
+        navigate(`/user?id=${userid}`);
       })
       .catch((error) => {
         console.log(error.response.data.errors);

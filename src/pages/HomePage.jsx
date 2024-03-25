@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { List } from "react-bootstrap-icons";
 import { NavLink, useLocation } from "react-router-dom";
 import UserAvatar from "../assets/images/userAvatar.png";
@@ -12,13 +13,31 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export default function HomePage() {
   const location = useLocation();
 
-  const user = location.state;
+  const [user, setUser] = useState(location.state);
+  const [getCatagoryBooks, setGetCatagoryBooks] = useState(null);
+
+  useEffect(() => {
+    if (user && user.avatar) {
+      HandleUser();
+    }
+    async function HandleUser() {
+      try {
+        await axios.get(`${apiUrl}/users/avatar/${user.avatar}`);
+      } catch (error) {
+        setUser(null);
+      }
+    }
+  }, [user]);
 
   return (
     <>
       <Layout>
         <div>
-          <NavDropDown id="nav-dropdown" title={"Category"} />
+          <NavDropDown
+            id="nav-dropdown"
+            title={"Category"}
+            setGetCatagoryBooks={setGetCatagoryBooks}
+          />
         </div>
         <div id="navbar-right">
           <NavSearchBar />
@@ -50,10 +69,10 @@ export default function HomePage() {
           ) : (
             <>
               <NavLink to="/signup" className="nav-link">
-                signup
+                SignUp
               </NavLink>
               <NavLink to="/login" className="nav-link">
-                login
+                Login
               </NavLink>
             </>
           )}
@@ -61,7 +80,7 @@ export default function HomePage() {
         </div>
       </Layout>
       <div style={{ marginTop: 97 }} />
-      <HomePageBody />
+      <HomePageBody getCatagoryBooks={getCatagoryBooks} user={user} />
     </>
   );
 }

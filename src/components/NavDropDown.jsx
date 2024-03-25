@@ -1,17 +1,22 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { Dropdown } from "react-bootstrap";
+import Category from "./Category";
 
 class NavDropDown extends React.Component {
   render() {
-    const { title } = this.props; // Destructuring props in the render method (optional)
+    const { title, setGetCatagoryBooks } = this.props; // Destructuring props in the render method (optional)
     return (
       <Dropdown>
         <Dropdown.Toggle variant="tertiary" id="nav-dropdown">
           {title}
         </Dropdown.Toggle>
 
-        <Dropdown.Menu>{/* Dropdown items can be added here */}</Dropdown.Menu>
+        <Dropdown.Menu>
+          {title === "Category" && (
+            <Category setGetCatagoryBooks={setGetCatagoryBooks} />
+          )}
+        </Dropdown.Menu>
       </Dropdown>
     );
   }

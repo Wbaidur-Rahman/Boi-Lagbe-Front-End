@@ -106,7 +106,7 @@ export default function UserPageBody({ user }) {
             </div>
           </div>
           <div style={{ padding: 30 }}>
-            <h2>Rent Books</h2>
+            <h2>Addcart Books</h2>
             <div id="user-books-container">
               {user &&
                 user.adcartbooks.map((bookid) => (
@@ -114,13 +114,13 @@ export default function UserPageBody({ user }) {
                     key={bookid}
                     bookid={bookid}
                     user={user}
-                    parent="rentbooks"
+                    parent="adcartbooks"
                   />
                 ))}
             </div>
           </div>
           <div style={{ padding: 30 }}>
-            <h2>Addcart Books</h2>
+            <h2>Rent Books</h2>
             <div id="user-books-container">
               {user &&
                 user.rentbooks.map((bookid) => (
@@ -128,7 +128,7 @@ export default function UserPageBody({ user }) {
                     key={bookid}
                     bookid={bookid}
                     user={user}
-                    parent="adcartbooks"
+                    parent="rentbooks"
                   />
                 ))}
             </div>
