@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AddBooksPage from "./pages/AddBooksPage";
 import HomePage from "./pages/HomePage";
+import InfoPage from "./pages/InfoPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import UserPage from "./pages/UserPage";
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/login" element={<LoginPage />} />
         <Route exact path="/user" element={<UserPage />} />
         <Route exact path="/addbooks" element={<AddBooksPage />} />
+        <Route exact path="/info" element={<InfoPage />} />
       </Routes>
     </BrowserRouter>
   );

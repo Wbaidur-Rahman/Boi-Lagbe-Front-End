@@ -8,6 +8,8 @@ import Layout from "../components/Layout";
 import NavDropDown from "../components/NavDropDown";
 import NavSearchBar from "../components/NavSearchBar";
 
+import "../styles/Homepage.css";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function HomePage() {

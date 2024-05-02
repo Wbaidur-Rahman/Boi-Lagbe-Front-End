@@ -7,7 +7,7 @@ import "../styles/BookSubmitFormModule.css";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const categoryOptions = ["Academic", "Poem", "Nobel", "Gk", "Others"];
+const categoryOptions = ["Academic", "Poem", "Novel", "Gk", "Others"];
 const bookGenreKeys = [
   // Fiction genres
   "Fantasy",

@@ -1,0 +1,10 @@
+#profileupdateform ul input {
+  margin-left: 10px;
+  padding: 3px;
+  color: red;
+}
+#profileupdate button {
+  color: green;
+  padding: 3px;
+  margin-left: 30px;
+}

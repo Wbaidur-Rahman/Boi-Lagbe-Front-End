@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/UserPageBodyModule.css";
 
 import { ToastContainer } from "react-toastify";
+
+// internal imports
 import AddCartBook from "./AddcartBook";
 import DeleteBook from "./DeleteBook";
 import RemoveFromCart from "./RemoveFromCart";
@@ -79,10 +81,17 @@ export default function Book({ bookid, user, parent }) {
                         setShowPopup={setShowPopup}
                       />
                     )}
-                    {user && parent === "HomePage" && (
+                    {user && book && parent === "HomePage" && (
                       <RentTheBook
                         user={user}
-                        bookid={bookid}
+                        book={book}
+                        setShowPopup={setShowPopup}
+                      />
+                    )}
+                    {user && book && parent === "adcartbooks" && (
+                      <RentTheBook
+                        user={user}
+                        book={book}
                         setShowPopup={setShowPopup}
                       />
                     )}

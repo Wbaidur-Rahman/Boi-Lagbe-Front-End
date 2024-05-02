@@ -39,5 +39,12 @@ export default function DeleteBook({ user, bookid, setShowPopup }) {
     onUpdate({ updatedUser });
   };
 
-  return <button onClick={removeUserBook}>Delete</button>;
+  return (
+    <button
+      onClick={removeUserBook}
+      style={{ padding: 5, marginTop: 10, color: "red" }}
+    >
+      Delete
+    </button>
+  );
 }

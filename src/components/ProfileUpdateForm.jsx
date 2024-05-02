@@ -1,6 +1,60 @@
+import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import "../styles/ProfileUpdate.css";
 
-export default function ProfileUpdateForm({ user, onUpdate, setIsEditing }) {
+const apiUrl = import.meta.env.VITE_API_URL;
+
+async function handleProfileUpdate({
+  user,
+  userData,
+  setImgerror,
+  setIsEditing,
+}) {
+  try {
+    const response = await axios.put(`${apiUrl}/users/${user._id}`, userData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (response.data) {
+      console.log(response.data);
+      toast.success(response.data.msg, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+      });
+      setIsEditing(false);
+    }
+  } catch (error) {
+    const errors = error.response.data.errors;
+    console.log(errors);
+
+    if (errors.avatar) {
+      setImgerror(errors.avatar.msg);
+    }
+
+    let msg;
+
+    if (errors.name) {
+      msg = errors.name.msg;
+    } else if (errors.address) {
+      msg = errors.address.msg;
+    } else if (errors.avatar) {
+      msg = errors.avatar.msg + ", 1 Mb allowed";
+    } else {
+      msg = "Something went wrong";
+    }
+
+    toast.error(msg, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+    });
+  }
+}
+
+export default function ProfileUpdateForm({ user, setImgerror, setIsEditing }) {
   const [name, setName] = useState(user.name);
   const [avatar, setAvatar] = useState(user.avatar);
   // const [mobile, setMobile] = useState(user.mobile);
@@ -15,11 +69,11 @@ export default function ProfileUpdateForm({ user, onUpdate, setIsEditing }) {
     // userData.append("mobile", mobile);
     userData.append("address", address);
     userData.append("password", password);
-    onUpdate(userData);
+    handleProfileUpdate({ user, userData, setImgerror, setIsEditing });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="profileupdateform" onSubmit={handleSubmit}>
       <ul>
         Name:
         <input
@@ -54,7 +108,7 @@ export default function ProfileUpdateForm({ user, onUpdate, setIsEditing }) {
           }}
         />
       </ul>
-      <div>
+      <div id="profileupdate">
         <button type="submit">Update Profile</button>
         <button style={{ marginLeft: 20 }} onClick={() => setIsEditing(false)}>
           Cancel

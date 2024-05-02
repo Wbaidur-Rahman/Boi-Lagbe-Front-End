@@ -4,7 +4,7 @@ function Logo() {
   return (
     <div className="logo">
       <img src={logo} alt="logo" />
-      <span>Boi Lagbe</span>
+      <span style={{ color: "darkblue" }}>Boi Lagbe</span>
     </div>
   );
 }

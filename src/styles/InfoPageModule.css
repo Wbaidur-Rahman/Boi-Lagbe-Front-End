@@ -1,0 +1,62 @@
+* {
+  color: brown;
+}
+
+/* rent requests */
+#rentreq_container {
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  width: 90%;
+  margin: auto;
+  background-color: aliceblue;
+  flex-wrap: wrap;
+}
+
+#rentreq_card {
+  background-color: antiquewhite;
+  font-size: large;
+  font-weight: 500;
+  margin: 10px;
+  padding: 10px;
+  width: 300px;
+  height: 300px;
+  box-sizing: border-box;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 5px 5px orange;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#rentreq_card button {
+  padding: 3px;
+  margin: 20px;
+  color: green;
+}
+
+/* notifications */
+#notification_container {
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  width: 90%;
+  margin: auto;
+  background-color: aliceblue;
+  flex-wrap: wrap;
+}
+
+#notify_card {
+  width: 70%;
+  background-color: antiquewhite;
+  font-size: large;
+  font-weight: 500;
+  margin: 10px;
+  padding: 10px;
+}
+
+#notify_card p {
+  color: rgb(0, 0, 0);
+}

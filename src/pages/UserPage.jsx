@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AdminPageBody from "../components/AdminPageBody";
 import Layout from "../components/Layout";
 import UserPageBody from "../components/UserPageBody";
 
@@ -47,7 +48,32 @@ export default function UserPage() {
     <div>
       <ToastContainer />
       <Layout>
-        <div></div>
+        <div style={{ display: "flex" }}>
+          <Link
+            to={`/info?id=${userid}&type=request`}
+            className="nav-link"
+            style={{ margin: 10, paddingRight: 10 }}
+          >
+            RentReqs
+          </Link>
+          <Link
+            to={`/info?id=${userid}&type=notify`}
+            className="nav-link"
+            style={{ margin: 10, paddingRight: 10 }}
+          >
+            Notifications
+          </Link>
+
+          {user && user.role === "agent" && (
+            <Link
+              to={`/info?id=${userid}&type=rent`}
+              className="nav-link"
+              style={{ margin: 10, paddingRight: 10 }}
+            >
+              Rents
+            </Link>
+          )}
+        </div>
         <div style={{ display: "flex" }}>
           {user && (
             <Link
@@ -81,7 +107,8 @@ export default function UserPage() {
         </div>
       </Layout>
       <div style={{ marginTop: 100 }} />
-      <UserPageBody user={user} />
+      {user && user.role !== "admin" && <UserPageBody user={user} />}
+      {user && user.role === "admin" && <AdminPageBody user={user} />}
     </div>
   );
 }
