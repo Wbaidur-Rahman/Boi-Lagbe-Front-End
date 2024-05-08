@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export default function DeleteBook({ user, bookid, setShowPopup }) {
+export default function DeleteBook({ user, bookid, setShowPopup, onDelete }) {
   // purpose is to updating user data
   async function onUpdate({ updatedUser }) {
     try {
@@ -24,6 +24,8 @@ export default function DeleteBook({ user, bookid, setShowPopup }) {
           hideProgressBar: true,
         });
       }
+      // refreshing the page for vanishing the deleted one
+      onDelete(bookid);
     } catch (error) {
       console.log(error.response.data);
     }

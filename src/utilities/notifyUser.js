@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+// {title, ownerid, message}
+
 export default async function notifyUser(notification){
     try {
         await axios.post(`${apiUrl}/notification/`, notification);

@@ -14,7 +14,7 @@ export async function onUpdate({ user, updatedUser }) {
     if (response.data) {
       toast.success(response.data.msg, {
         position: "top-center",
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
     }

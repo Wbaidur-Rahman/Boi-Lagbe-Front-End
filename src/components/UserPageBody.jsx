@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import avatar from "../assets/images/userAvatar.png";
 import Book from "../components/Book";
@@ -10,6 +10,23 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export default function UserPageBody({ user }) {
   const [isEditing, setIsEditing] = useState(false);
   const [imgerror, setImgerror] = useState("");
+
+  const [cartbooks, setCartbooks] = useState(null);
+  const [mybooks, setMybooks] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setCartbooks(user.adcartbooks);
+      setMybooks(user.books);
+    }
+  }, [user]);
+
+  function handleDeleteCarts(id) {
+    setCartbooks(cartbooks.filter((book_id) => book_id !== id));
+  }
+  function handleDeleteMyBook(id) {
+    setMybooks(mybooks.filter((book_id) => book_id !== id));
+  }
 
   return (
     <div>
@@ -62,13 +79,14 @@ export default function UserPageBody({ user }) {
             <div style={{ padding: 30 }}>
               <h2>My Books</h2>
               <div id="user-books-container">
-                {user &&
-                  user.books.map((bookid) => (
+                {mybooks &&
+                  mybooks.map((bookid) => (
                     <Book
                       key={bookid}
                       bookid={bookid}
                       user={user}
                       parent="userbooks"
+                      onDelete={handleDeleteMyBook}
                     />
                   ))}
               </div>
@@ -76,13 +94,14 @@ export default function UserPageBody({ user }) {
             <div style={{ padding: 30 }}>
               <h2>Addcart Books</h2>
               <div id="user-books-container">
-                {user &&
-                  user.adcartbooks.map((bookid) => (
+                {cartbooks &&
+                  cartbooks.map((bookid) => (
                     <Book
                       key={bookid}
                       bookid={bookid}
                       user={user}
                       parent="adcartbooks"
+                      onDelete={handleDeleteCarts}
                     />
                   ))}
               </div>

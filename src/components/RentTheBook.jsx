@@ -1,11 +1,12 @@
 /*
  * Title: Renting a book
- * Description: Renting actions is performed here
+ * Description: Renting actions is performed here like sending rent requests
  * Author: Wbaidur Rahman
  * Date: 28/3/2024
  *
  */
 
+import axios from "axios";
 import { useState } from "react";
 import "../styles/UserPageBodyModule.css";
 import sendRentRequest from "../utilities/sendRentRequest";
@@ -20,21 +21,56 @@ export default function RentTheBook({ user, book, setShowPopup }) {
   const [phoneError, setPhoneError] = useState(null);
   const [cost, setCost] = useState(0);
   const [tag, setTag] = useState({});
+  const [limit, setLimit] = useState("");
   const price = Number(book.data.price);
 
   // sending the rent request
   async function handleSendRequest() {
+    const response = await axios.get(`${apiUrl}/users?id=${user._id}`);
+    const user1 = response.data.user;
+
     if (Number(duration) > 21 || Number(duration) < 3) {
       setDurationError("Duration Must be 3 to 21 Days");
       return;
     }
+    if (Number(user1.collateral) < 100) {
+      if (user1.rentbooks.length > 0) {
+        setLimit("FreeCollateralLimitCrossed");
+        console.log(user1.rentbooks);
+        return;
+      }
+      if (user1.sentreqs.length > 0) {
+        setPhoneError("You have already sent a request");
+        return;
+      }
+    } else {
+      if (user1.rentbooks.length > 2) {
+        setPhoneError("You can only rent at most three books");
+        return;
+      }
+      if (user1.sentreqs.length > 0 && user1.rentbooks.length > 1) {
+        setPhoneError("You have already reached request limits");
+        return;
+      }
+      if (user1.sentreqs.length > 1 && user1.rentbooks.length > 0) {
+        setPhoneError("You have already reached request limits");
+        return;
+      }
+    }
+
+    if (!tag) {
+      setPhoneError(
+        "Sorry, The book is not available, please check again later"
+      );
+      return;
+    }
     try {
-      await sendRentRequest({ book, tag, duration, cost, user, phone });
+      await sendRentRequest({ book, tag, duration, cost, user1, phone });
       setShowPopup(false);
     } catch (error) {
-      const errors = error.response.data.errors;
+      console.log(error);
+      const errors = error.response ? error.response.data.errors : {};
       if (errors.borrowerphone) setPhoneError(errors.borrowerphone.msg);
-      if (errors.duration) setDurationError(errors.duration.msg);
     }
   }
 
@@ -117,6 +153,21 @@ export default function RentTheBook({ user, book, setShowPopup }) {
               <p style={{ color: "red", padding: 3, width: 300 }}>
                 {phoneError}
               </p>
+            )}
+            {limit == "FreeCollateralLimitCrossed" && (
+              <div
+                style={{
+                  width: "300px",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                }}
+              >
+                <p style={{ color: "red" }}>
+                  You have already rented 2 books so You should pay 100 taka as
+                  Collateral first
+                </p>
+                <button style={{ padding: "3px" }}>Pay Collateral</button>
+              </div>
             )}
             <br />
             <br />

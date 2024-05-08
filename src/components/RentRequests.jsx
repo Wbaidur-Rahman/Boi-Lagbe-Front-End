@@ -8,7 +8,7 @@ import GetOwnerPhone from "./GetOwnerPhone";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // Displaying each rent requests
-function RentRequest({ rentreq_id, user }) {
+function RentRequest({ rentreq_id, user, onDelete }) {
   const [rentreq, setRentreq] = useState({});
   const [show, setShow] = useState(false);
 
@@ -31,6 +31,7 @@ function RentRequest({ rentreq_id, user }) {
 
   const handleReject = () => {
     rejectRentReq({ rentreq, user });
+    onDelete(rentreq_id);
   };
 
   return (
@@ -41,7 +42,14 @@ function RentRequest({ rentreq_id, user }) {
         <p>Amount: {rentreq.amount}</p>
       </div>
       <div>
-        {show && <GetOwnerPhone rentreq={rentreq} setShow={setShow} />}
+        {show && (
+          <GetOwnerPhone
+            rentreq={rentreq}
+            setShow={setShow}
+            rentreq_id={rentreq_id}
+            onDelete={onDelete}
+          />
+        )}
         {!show && <button onClick={() => setShow(true)}>Accept</button>}
         {!show && (
           <button onClick={handleReject} style={{ color: "red" }}>
@@ -55,18 +63,35 @@ function RentRequest({ rentreq_id, user }) {
 
 // here i am fetching the rentreqs of corresponding user
 export default function RentRequests({ user }) {
+  const [rentreqs, setRentreqs] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setRentreqs(user.rentrequests);
+    }
+  }, [user]);
+
+  function handleDelete(id) {
+    setRentreqs(rentreqs.filter((rent_id) => rent_id !== id));
+  }
+
   return (
     <div>
       <div id="rentreq_container">
-        {user && user.rentrequests.length === 0 && (
+        {rentreqs && rentreqs.length === 0 && (
           <h2>Opps..., No Rent Request Found</h2>
         )}
-        {user && user.rentrequests.length > 0 && <h2>Rent Requests</h2>}
+        {rentreqs && rentreqs.length > 0 && <h2>Rent Requests</h2>}
       </div>
       <div id="rentreq_container">
-        {user &&
-          user.rentrequests.map((rentreq_id) => (
-            <RentRequest key={rentreq_id} rentreq_id={rentreq_id} user={user} />
+        {rentreqs &&
+          rentreqs.map((rentreq_id) => (
+            <RentRequest
+              key={rentreq_id}
+              rentreq_id={rentreq_id}
+              user={user}
+              onDelete={handleDelete}
+            />
           ))}
       </div>
     </div>

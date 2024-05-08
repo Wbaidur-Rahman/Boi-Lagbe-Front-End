@@ -1,6 +1,11 @@
 import { onUpdate } from "../utilities/updateUser";
 
-export default function RemoveFromCart({ user, bookid, setShowPopup }) {
+export default function RemoveFromCart({
+  user,
+  bookid,
+  setShowPopup,
+  onDelete,
+}) {
   // purpose is to remove userbook
   const removeCartBook = async () => {
     setShowPopup(false);
@@ -10,6 +15,7 @@ export default function RemoveFromCart({ user, bookid, setShowPopup }) {
     };
     try {
       await onUpdate({ user, updatedUser });
+      onDelete(bookid);
     } catch (error) {
       console.log(error);
     }

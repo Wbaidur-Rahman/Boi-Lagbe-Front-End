@@ -37,7 +37,7 @@ export async function rejectRentReq({rentreq, user}){
         if (response.data) {
             toast.success(response.data.msg, {
                 position: "top-center",
-                autoClose: 1000,
+                autoClose: 500,
                 hideProgressBar: true,
             });
         }
@@ -60,6 +60,7 @@ export async function rejectRentReq({rentreq, user}){
 export async function acceptRentReq({rentreq, ownerPhone}){
 
     try {
+        // getting an agent
         let response = await axios.get(`${apiUrl}/admin/`);
         const agent = response.data.agent;
         
@@ -84,7 +85,7 @@ export async function acceptRentReq({rentreq, ownerPhone}){
         if(response.data){
             toast.success(response.data.msg, {
                 position: "top-center",
-                autoClose: 2000,
+                autoClose: 500,
                 hideProgressBar: true,
             });
         }
@@ -101,8 +102,8 @@ export async function acceptRentReq({rentreq, ownerPhone}){
          // notifying the agent
          const notification2 = {
             ownerid: agent.agentid,
-            title: "RentReq Acceptance",
-            message: `Your have a rent Request for book '${rentreq.title}'`,
+            title: "Rent Service",
+            message: `You have a rent service for book '${rentreq.title}'`,
         }
 
         notifyUser(notification2);

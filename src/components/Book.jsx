@@ -10,10 +10,12 @@ import AddCartBook from "./AddcartBook";
 import DeleteBook from "./DeleteBook";
 import RemoveFromCart from "./RemoveFromCart";
 import RentTheBook from "./RentTheBook";
+import Review from "./Review";
+import ShowReview from "./ShowReview";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export default function Book({ bookid, user, parent }) {
+export default function Book({ bookid, user, parent, onDelete }) {
   const [book, setBook] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -67,11 +69,29 @@ export default function Book({ bookid, user, parent }) {
                     <p>Pages: {book.data.pages}</p>
                     <p>PageType: {book.data.pagetype}</p>
 
+                    <div
+                      style={{
+                        paddingBottom: "30px",
+                        borderBottom: "1px solid black",
+                      }}
+                    >
+                      <ShowReview bookid={bookid} />
+                    </div>
+
+                    {user && parent === "HomePage" && (
+                      <Review
+                        userid={user._id}
+                        bookid={bookid}
+                        setShowPopup={setShowPopup}
+                      />
+                    )}
+
                     {parent === "userbooks" && (
                       <DeleteBook
                         user={user}
                         bookid={bookid}
                         setShowPopup={setShowPopup}
+                        onDelete={onDelete}
                       />
                     )}
                     {parent === "adcartbooks" && (
@@ -79,6 +99,7 @@ export default function Book({ bookid, user, parent }) {
                         user={user}
                         bookid={bookid}
                         setShowPopup={setShowPopup}
+                        onDelete={onDelete}
                       />
                     )}
                     {user && book && parent === "HomePage" && (

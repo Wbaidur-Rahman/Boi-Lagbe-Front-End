@@ -7,7 +7,10 @@ export default function addCartBook({ user, bookid, setShowPopup }) {
     // console.log(bookid);
     const updatedUser = {
       ...user,
-      adcartbooks: [...(user.adcartbooks || []), bookid], // Ensure adCartBooks is initialized as an array
+      adcartbooks:
+        user.adcartbooks && user.adcartbooks.includes(bookid)
+          ? user.adcartbooks // If bookid is already in adcartbooks, keep adcartbooks unchanged
+          : [...(user.adcartbooks || []), bookid],
     };
     onUpdate({ user, updatedUser });
   };

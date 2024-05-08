@@ -2,12 +2,18 @@ import { useState } from "react";
 import { acceptRentReq } from "../utilities/rentRequestHandler";
 
 // If the owner accept the rent request then he must give his phone number
-export default function GetOwnerPhone({ rentreq, setShow }) {
+export default function GetOwnerPhone({
+  rentreq,
+  setShow,
+  rentreq_id,
+  onDelete,
+}) {
   const [ownerPhone, setOwnerPhone] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     acceptRentReq({ rentreq, ownerPhone });
+    onDelete(rentreq_id);
   };
 
   return (
