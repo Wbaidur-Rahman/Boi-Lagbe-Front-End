@@ -5,6 +5,8 @@ import LoginUser from "../assets/images/LoginUser.png";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
+import { useDispatch } from "react-redux";
+import { setuser } from "../features/users/usersSlice";
 import "../styles/LoginModule.css";
 
 export default function LoginForm() {
@@ -12,6 +14,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate(); // Initialize useHistory hook
+  const dispatch = useDispatch();
 
   const handleLogin = (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -20,14 +23,16 @@ export default function LoginForm() {
       password: password,
     };
 
+    // setting the redux user
+
     // Make an HTTP POST request to your server endpoint
     axios
       .post(`${apiUrl}/login`, formData)
       .then((response) => {
-        const userid = response.data.userObject.userid;
+        dispatch(setuser(response.data.userObject));
 
         // Redirect to the desired page after successful login
-        navigate(`/user?id=${userid}`);
+        navigate(`/user`);
       })
       .catch((error) => {
         console.log(error.response.data.errors);

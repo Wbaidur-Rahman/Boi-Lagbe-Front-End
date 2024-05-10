@@ -7,13 +7,20 @@ export default function AddBooksPage() {
     <>
       <Layout>
         <div></div>
-        <div>
+        <div style={{ display: "flex", flexDirection: "row" }}>
           <NavLink
-            to="/addbooks"
+            to="/user"
             className="nav-link"
             style={{ margin: 10, paddingRight: 30 }}
           >
-            AddBooksPage
+            Profile
+          </NavLink>
+          <NavLink
+            to="/"
+            className="nav-link"
+            style={{ margin: 10, paddingRight: 30 }}
+          >
+            Home
           </NavLink>
         </div>
       </Layout>

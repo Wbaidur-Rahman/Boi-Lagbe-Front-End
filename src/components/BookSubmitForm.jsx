@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/BookSubmitFormModule.css";
 
@@ -28,6 +28,7 @@ const bookGenreKeys = [
 
 export default function BookSubmitForm() {
   // Extracting query parameters using useLocation hook
+  const navigate = useNavigate();
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
   const userid = queryParams.get("id");
@@ -45,6 +46,7 @@ export default function BookSubmitForm() {
   const [pages, setPages] = useState("");
   const [pagetype, setPagetype] = useState("");
   const [coverImage, setCoverImage] = useState(null); // State for cover image
+  const [coverImageError, setCoverImageError] = useState(null);
 
   function handleSubmit(event) {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -87,6 +89,7 @@ export default function BookSubmitForm() {
       })
       .catch((error) => {
         const errors = error.response.data.errors;
+        if (error.response.status === 401) navigate("/login");
 
         if (errors.title) {
           setTitleError(errors.title.msg);
@@ -99,6 +102,8 @@ export default function BookSubmitForm() {
         }
         if (errors["data.isbn"]) {
           setIsbnError(errors["data.isbn"].msg);
+        } else {
+          setCoverImageError("Please select a cover image less than 1 mb");
         }
 
         if (errors["data.category"] || errors["data.genre"]) {
@@ -239,6 +244,7 @@ export default function BookSubmitForm() {
           />
         </ul>
         <ul>
+          {coverImageError && <span>{coverImageError}</span>}
           <button type="submit">Submit</button>
         </ul>
       </form>

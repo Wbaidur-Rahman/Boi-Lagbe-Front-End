@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminPageBody from "../components/AdminPageBody";
@@ -11,26 +12,27 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function UserPage() {
   const navigate = useNavigate();
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const userid = queryParams.get("id");
+
+  const { loggedinuser } = useSelector((state) => state.users);
+  const user_id = loggedinuser ? loggedinuser.userid : null;
 
   const [user, setUser] = useState(null);
+  const [userid, setUserId] = useState(null);
 
   useEffect(() => {
-    if (userid) {
-      HandleUser();
-    }
-    async function HandleUser() {
+    getUser();
+
+    async function getUser() {
       try {
-        const response = await axios.get(`${apiUrl}/users?id=${userid}`);
+        const response = await axios.get(`${apiUrl}/users`);
         setUser(response.data.user);
+        setUserId(response.data.user._id);
       } catch (error) {
         console.log(error.response.data.errors);
         navigate("/login");
       }
     }
-  }, [userid]);
+  }, [user_id]);
 
   // Logout function to handle logout and redirect to home page
   const handleLogout = async () => {

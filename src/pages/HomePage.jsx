@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { List } from "react-bootstrap-icons";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import UserAvatar from "../assets/images/userAvatar.png";
 import HomePageBody from "../components/HomePageBody";
 import Layout from "../components/Layout";
@@ -13,23 +13,22 @@ import "../styles/Homepage.css";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function HomePage() {
-  const location = useLocation();
-
-  const [user, setUser] = useState(location.state);
   const [getCatagoryBooks, setGetCatagoryBooks] = useState(null);
 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
-    if (user && user.avatar) {
-      HandleUser();
-    }
+    if (!user) HandleUser();
+
     async function HandleUser() {
       try {
-        await axios.get(`${apiUrl}/users/avatar/${user.avatar}`);
+        const response = await axios.get(`${apiUrl}/users`);
+        setUser(response.data.user);
       } catch (error) {
         setUser(null);
       }
     }
-  }, [user]);
+  });
 
   return (
     <>
@@ -44,13 +43,18 @@ export default function HomePage() {
         <div id="navbar-right">
           <NavSearchBar />
           {user ? (
-            <NavLink to={`/user?id=${user._id}`} className="nav-link">
+            <NavLink to={`/user`} className="nav-link">
               <div style={{ display: "flex", justifyContent: "center" }}>
                 {user.avatar ? (
                   <img
                     src={`${apiUrl}/users/avatar/${user.avatar}`}
                     alt="userAvatar"
-                    style={{ width: 30, height: 30, marginRight: 10 }}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 10,
+                      borderRadius: "50px",
+                    }}
                   />
                 ) : (
                   <img
@@ -66,7 +70,7 @@ export default function HomePage() {
                   />
                 )}
               </div>
-              <h6>MyProfile</h6>
+              <h6 style={{ paddingTop: "3px" }}>Profile</h6>
             </NavLink>
           ) : (
             <>

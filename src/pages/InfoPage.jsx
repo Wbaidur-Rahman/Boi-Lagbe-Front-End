@@ -43,8 +43,16 @@ export default function InfoPage() {
         <div style={{ display: "flex", marginRight: 50 }}>
           {user && (
             <Link
+              to="/user"
+              className="nav-link"
+              style={{ margin: 10, paddingRight: 10 }}
+            >
+              Profile
+            </Link>
+          )}
+          {user && (
+            <Link
               to="/"
-              state={user}
               className="nav-link"
               style={{ margin: 10, paddingRight: 10 }}
             >
