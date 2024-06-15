@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/BookSubmitFormModule.css";
@@ -26,12 +26,9 @@ const bookGenreKeys = [
   "Memoir",
 ];
 
-export default function BookSubmitForm() {
+export default function BookSubmitForm({ userid }) {
   // Extracting query parameters using useLocation hook
   const navigate = useNavigate();
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const userid = queryParams.get("id");
 
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");

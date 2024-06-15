@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,14 +12,11 @@ const apiUrl = import.meta.env.VITE_API_URL;
 export default function UserPage() {
   const navigate = useNavigate();
 
-  const { loggedinuser } = useSelector((state) => state.users);
-  const user_id = loggedinuser ? loggedinuser.userid : null;
-
   const [user, setUser] = useState(null);
   const [userid, setUserId] = useState(null);
 
   useEffect(() => {
-    getUser();
+    if (!userid) getUser();
 
     async function getUser() {
       try {
@@ -32,7 +28,7 @@ export default function UserPage() {
         navigate("/login");
       }
     }
-  }, [user_id]);
+  }, [userid]);
 
   // Logout function to handle logout and redirect to home page
   const handleLogout = async () => {
@@ -52,14 +48,14 @@ export default function UserPage() {
       <Layout>
         <div style={{ display: "flex" }}>
           <Link
-            to={`/info?id=${userid}&type=request`}
+            to={`/info?type=request`}
             className="nav-link"
             style={{ margin: 10, paddingRight: 10 }}
           >
             RentReqs
           </Link>
           <Link
-            to={`/info?id=${userid}&type=notify`}
+            to={`/info?type=notify`}
             className="nav-link"
             style={{ margin: 10, paddingRight: 10 }}
           >
@@ -68,7 +64,7 @@ export default function UserPage() {
 
           {user && user.role === "agent" && (
             <Link
-              to={`/info?id=${userid}&type=rent`}
+              to={`/info?type=rent`}
               className="nav-link"
               style={{ margin: 10, paddingRight: 10 }}
             >
@@ -88,7 +84,7 @@ export default function UserPage() {
             </Link>
           )}
           <Link
-            to={`/addbooks?id=${userid}`}
+            to={`/addbooks`}
             className="nav-link"
             style={{ margin: 10, paddingRight: 10 }}
           >

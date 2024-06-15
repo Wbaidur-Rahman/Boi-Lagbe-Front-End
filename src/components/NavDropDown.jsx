@@ -5,18 +5,14 @@ import Category from "./Category";
 
 class NavDropDown extends React.Component {
   render() {
-    const { title, setGetCatagoryBooks } = this.props; // Destructuring props in the render method (optional)
+    const { title } = this.props; // Destructuring props in the render method (optional)
     return (
       <Dropdown>
         <Dropdown.Toggle variant="tertiary" id="nav-dropdown">
           {title}
         </Dropdown.Toggle>
 
-        <Dropdown.Menu>
-          {title === "Category" && (
-            <Category setGetCatagoryBooks={setGetCatagoryBooks} />
-          )}
-        </Dropdown.Menu>
+        <Dropdown.Menu>{title === "Category" && <Category />}</Dropdown.Menu>
       </Dropdown>
     );
   }

@@ -23,8 +23,6 @@ export default function LoginForm() {
       password: password,
     };
 
-    // setting the redux user
-
     // Make an HTTP POST request to your server endpoint
     axios
       .post(`${apiUrl}/login`, formData)

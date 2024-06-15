@@ -13,8 +13,6 @@ import "../styles/Homepage.css";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function HomePage() {
-  const [getCatagoryBooks, setGetCatagoryBooks] = useState(null);
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -34,11 +32,7 @@ export default function HomePage() {
     <>
       <Layout>
         <div>
-          <NavDropDown
-            id="nav-dropdown"
-            title={"Category"}
-            setGetCatagoryBooks={setGetCatagoryBooks}
-          />
+          <NavDropDown id="nav-dropdown" title={"Category"} />
         </div>
         <div id="navbar-right">
           <NavSearchBar />
@@ -50,8 +44,9 @@ export default function HomePage() {
                     src={`${apiUrl}/users/avatar/${user.avatar}`}
                     alt="userAvatar"
                     style={{
-                      width: 30,
-                      height: 30,
+                      width: 40,
+                      height: 40,
+                      marginTop: "10px",
                       marginRight: 10,
                       borderRadius: "50px",
                     }}
@@ -63,6 +58,7 @@ export default function HomePage() {
                     style={{
                       width: 30,
                       height: 30,
+                      marginTop: "10px",
                       marginRight: 10,
                       boxSizing: "border-box",
                       borderRadius: 50,
@@ -70,7 +66,6 @@ export default function HomePage() {
                   />
                 )}
               </div>
-              <h6 style={{ paddingTop: "3px" }}>Profile</h6>
             </NavLink>
           ) : (
             <>
@@ -86,7 +81,7 @@ export default function HomePage() {
         </div>
       </Layout>
       <div style={{ marginTop: 97 }} />
-      <HomePageBody getCatagoryBooks={getCatagoryBooks} user={user} />
+      <HomePageBody user={user} />
     </>
   );
 }

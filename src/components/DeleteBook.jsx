@@ -8,7 +8,10 @@ export default function DeleteBook({ user, bookid, setShowPopup, onDelete }) {
   async function onUpdate({ updatedUser }) {
     try {
       // deleting the book
-      const response1 = await axios.delete(`${apiUrl}/books/${bookid}`);
+      const response1 = await axios.delete(
+        `${apiUrl}/books/${bookid}/${user._id}`
+      );
+
       console.log(response1.data);
 
       // removing book from user

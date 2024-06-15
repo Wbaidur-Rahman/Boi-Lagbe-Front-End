@@ -1,7 +1,7 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
 import AppendedHomeBody from "./AppendedHomeBody";
 
-const HomePageBody = ({ getCatagoryBooks, user }) => {
+const HomePageBody = ({ user }) => {
   return (
     <>
       <Container className="mt-4">
@@ -41,7 +41,7 @@ const HomePageBody = ({ getCatagoryBooks, user }) => {
           </Col>
         </Row>
       </Container>
-      <AppendedHomeBody getCatagoryBooks={getCatagoryBooks} user={user} />
+      <AppendedHomeBody user={user} />
     </>
   );
 };

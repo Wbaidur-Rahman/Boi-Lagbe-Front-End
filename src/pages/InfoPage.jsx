@@ -15,19 +15,20 @@ export default function InfoPage() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
-  const userid = queryParams.get("id");
   const infotype = queryParams.get("type");
 
   const [user, setUser] = useState(null);
+  const [userid, setUserId] = useState(null);
 
   useEffect(() => {
-    if (userid) {
+    if (!userid) {
       HandleUser();
     }
     async function HandleUser() {
       try {
         const response = await axios.get(`${apiUrl}/users?id=${userid}`);
         setUser(response.data.user);
+        setUserId(response.data.user._id);
       } catch (error) {
         console.log(error.response.data.errors);
         navigate("/login");

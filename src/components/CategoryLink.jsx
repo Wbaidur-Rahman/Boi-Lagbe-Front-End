@@ -1,8 +1,12 @@
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setcategory } from "../features/books/booksSlices";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export default function CategoryLink({ category, setGetCatagoryBooks }) {
+export default function CategoryLink({ category }) {
+  const dispatch = useDispatch();
+
   async function getBooksByCategory() {
     try {
       const response = await axios.get(
@@ -11,7 +15,7 @@ export default function CategoryLink({ category, setGetCatagoryBooks }) {
 
       const bookIds = response.data.bookIds;
       bookIds.category = category;
-      setGetCatagoryBooks(bookIds);
+      dispatch(setcategory(bookIds));
     } catch (error) {
       console.log(error);
     }
