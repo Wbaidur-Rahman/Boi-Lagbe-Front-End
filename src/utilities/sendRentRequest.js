@@ -8,9 +8,12 @@ export default async function sendRentRequest({ book, tag, duration, cost, user1
         bookid: book._id,
         duration,
         borrowerid: user1._id,
+        borrower_name: user1.name,
+        borrower_email: user1.email,
+        borrower_address: user1.address,
+        borrowerphone: phone,
         amount: cost,
         ownerid: tag.ownerid,
-        borrowerphone: phone,
     }
   try {
     // rent request is generated and sent to owner

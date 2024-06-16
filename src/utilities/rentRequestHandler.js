@@ -66,7 +66,10 @@ export async function acceptRentReq({rentreq, ownerPhone}){
         
         const rentinfo = {
             borrowerid: rentreq.borrowerid,
+            borrower_name: rentreq.borrower_name,
             borrowerphone: rentreq.borrowerphone,
+            borrower_email: rentreq.borrower_email,
+            borrower_address: rentreq.borrower_address,
             ownerid: rentreq.ownerid,
             ownerphone: ownerPhone,
             bookid: rentreq.bookid,

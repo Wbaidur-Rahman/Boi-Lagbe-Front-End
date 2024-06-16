@@ -10,15 +10,16 @@ import axios from "axios";
 import { useState } from "react";
 import "../styles/UserPageBodyModule.css";
 import sendRentRequest from "../utilities/sendRentRequest";
+import { onUpdate } from "../utilities/updateUser";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function RentTheBook({ user, book, setShowPopup }) {
   const [rentPopup, setRentPopup] = useState(false);
-  const [duration, setDuration] = useState(null);
-  const [durationError, setDurationError] = useState(null);
-  const [phone, setPhone] = useState(null);
-  const [phoneError, setPhoneError] = useState(null);
+  const [duration, setDuration] = useState("");
+  const [durationError, setDurationError] = useState("");
+  const [phone, setPhone] = useState(user ? user.mobile : "");
+  const [phoneError, setPhoneError] = useState("");
   const [cost, setCost] = useState(0);
   const [tag, setTag] = useState({});
   const [limit, setLimit] = useState("");
@@ -26,7 +27,17 @@ export default function RentTheBook({ user, book, setShowPopup }) {
 
   // sending the rent request
   async function handleSendRequest() {
-    const response = await axios.get(`${apiUrl}/users?id=${user._id}`);
+    // if the user did not give the phone number when signed in i should add it now to the record
+    if (user) {
+      const updatedUser = {
+        ...user,
+        mobile: phone,
+      };
+      await onUpdate({ user, updatedUser });
+    }
+
+    // console.log(user);
+    const response = await axios.get(`${apiUrl}/users/${user._id}`);
     const user1 = response.data.user;
 
     if (Number(duration) > 21 || Number(duration) < 3) {
@@ -34,17 +45,17 @@ export default function RentTheBook({ user, book, setShowPopup }) {
       return;
     }
     if (Number(user1.collateral) < 100) {
-      if (user1.rentbooks.length > 0) {
+      if (user1.rentbooks.length > 100) {
         setLimit("FreeCollateralLimitCrossed");
         console.log(user1.rentbooks);
         return;
       }
-      if (user1.sentreqs.length > 0) {
+      if (user1.sentreqs.length > 100) {
         setPhoneError("You have already sent a request");
         return;
       }
     } else {
-      if (user1.rentbooks.length > 2) {
+      if (user1.rentbooks.length > 200) {
         setPhoneError("You can only rent at most three books");
         return;
       }
@@ -66,6 +77,7 @@ export default function RentTheBook({ user, book, setShowPopup }) {
     }
     try {
       await sendRentRequest({ book, tag, duration, cost, user1, phone });
+      alert("Rent Request Successful");
       setShowPopup(false);
     } catch (error) {
       console.log(error);
@@ -138,7 +150,7 @@ export default function RentTheBook({ user, book, setShowPopup }) {
               <p style={{ color: "red", padding: 3 }}>{durationError}</p>
             )}
             <p>Cost: {cost} taka</p>
-            <p>Enter phone number: </p>
+            <p>Phone Number: </p>
             <input
               type="text"
               placeholder="Phone Number"

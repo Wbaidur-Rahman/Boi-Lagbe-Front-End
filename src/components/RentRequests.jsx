@@ -44,6 +44,7 @@ function RentRequest({ rentreq_id, user, onDelete }) {
       <div>
         {show && (
           <GetOwnerPhone
+            user={user}
             rentreq={rentreq}
             setShow={setShow}
             rentreq_id={rentreq_id}
@@ -78,9 +79,7 @@ export default function RentRequests({ user }) {
   return (
     <div>
       <div id="rentreq_container">
-        {rentreqs && rentreqs.length === 0 && (
-          <h2>Opps..., No Rent Request Found</h2>
-        )}
+        {rentreqs && rentreqs.length === 0 && <h2>No Rent Request Found</h2>}
         {rentreqs && rentreqs.length > 0 && <h2>Rent Requests</h2>}
       </div>
       <div id="rentreq_container">
