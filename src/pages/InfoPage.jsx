@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import Notifications from "../components/Notifications";
 import RentRequests from "../components/RentRequests";
 import Rents from "../components/Rents";
+import StoreRequests from "../components/StoreRequests";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -66,6 +67,7 @@ export default function InfoPage() {
       {infotype === "request" && <RentRequests user={user} />}
       {infotype === "notify" && <Notifications user={user} />}
       {infotype === "rent" && <Rents user={user} />}
+      {infotype === "storereqs" && <StoreRequests user={user} />}
     </div>
   );
 }

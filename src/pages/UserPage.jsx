@@ -64,6 +64,16 @@ export default function UserPage() {
 
           {user && user.role === "agent" && (
             <Link
+              to={`/info?type=storereqs`}
+              className="nav-link"
+              style={{ margin: 10, paddingRight: 10 }}
+            >
+              StoreReqs
+            </Link>
+          )}
+
+          {user && user.role === "agent" && (
+            <Link
               to={`/info?type=rent`}
               className="nav-link"
               style={{ margin: 10, paddingRight: 10 }}

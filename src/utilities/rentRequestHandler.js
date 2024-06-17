@@ -83,7 +83,7 @@ export async function acceptRentReq({rentreq, ownerPhone}){
 
         response = await axios.post(`${apiUrl}/rents`, rentinfo);
 
-        console.log(response.data);
+        // console.log(response.data);
 
         if(response.data){
             toast.success(response.data.msg, {
