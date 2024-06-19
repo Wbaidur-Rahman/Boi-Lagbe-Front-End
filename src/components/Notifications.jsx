@@ -66,7 +66,7 @@ export default function Notifications({ user }) {
     <div>
       <div id="notification_container">
         {notifications && notifications.length === 0 && (
-          <h2>Opps..., No Notifications Found</h2>
+          <h2>No Notifications Found</h2>
         )}
         {notifications && notifications.length > 0 && <h2>Notifications</h2>}
       </div>

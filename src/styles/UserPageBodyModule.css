@@ -2,31 +2,35 @@ h2 {
   color: darkred;
   margin: 20px 0px 30px 0px;
 }
+.user-page-body {
+  height: auto;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 20px;
+  /* column-gap: 30px; */
+  /* background-color: #2196f3; */
+  padding: 10px;
+}
+.user-page-body > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  /* padding: 20px 0; */
+  /* font-size: 30px; */
+}
+
 .user-container {
-  width: 80%;
-  margin: auto;
-  justify-content: center;
   display: flex;
   flex-direction: row;
   padding-bottom: 30px;
 }
 
-.content-container {
-  width: 95%;
-  margin: auto;
-}
-
 .user-container img {
   width: 200px;
-  height: 200px;
+  height: 300px;
   box-sizing: border-box;
   border-radius: 10%;
-  box-shadow: 5px 5px;
-  margin: 10px;
-}
-
-#user-content {
-  margin: 10px;
+  /* box-shadow: 5px 5px; */
+  margin: 40px 20px 20px 40px;
 }
 
 #user-books-container {

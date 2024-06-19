@@ -6,7 +6,7 @@ import { setcategory } from "../features/books/booksSlices";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 function NavSearchBar() {
-  const [searchString, setSearchString] = useState();
+  const [searchString, setSearchString] = useState("");
 
   const dispatch = useDispatch();
 

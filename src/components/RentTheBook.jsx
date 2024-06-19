@@ -11,6 +11,7 @@ import { useState } from "react";
 import "../styles/UserPageBodyModule.css";
 import sendRentRequest from "../utilities/sendRentRequest";
 import { onUpdate } from "../utilities/updateUser";
+import PayCollateral from "./PayCollateral";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,15 +20,16 @@ export default function RentTheBook({ user, book, setShowPopup }) {
   const [duration, setDuration] = useState("");
   const [durationError, setDurationError] = useState("");
   const [phone, setPhone] = useState(user ? user.mobile : "");
-  const [phoneError, setPhoneError] = useState("");
+  const [error, setError] = useState("");
   const [cost, setCost] = useState(0);
   const [tag, setTag] = useState({});
-  const [limit, setLimit] = useState("");
+  const [paycollateral, setPaycollateral] = useState(false);
   const price = Number(book.data.price);
 
   // sending the rent request
   async function handleSendRequest() {
-    // if the user did not give the phone number when signed in i should add it now to the record
+    // if the user did not give the phone number or want to change the given number
+    // i should add it now to the record
     if (user) {
       const updatedUser = {
         ...user,
@@ -40,55 +42,49 @@ export default function RentTheBook({ user, book, setShowPopup }) {
     const response = await axios.get(`${apiUrl}/users/${user._id}`);
     const user1 = response.data.user;
 
+    // A user has to rent a book for 3 to 21 days
     if (Number(duration) > 21 || Number(duration) < 3) {
       setDurationError("Duration Must be 3 to 21 Days");
       return;
     }
-    if (Number(user1.collateral) < 100) {
-      if (user1.rentbooks.length > 100) {
-        setLimit("FreeCollateralLimitCrossed");
-        console.log(user1.rentbooks);
-        return;
-      }
-      if (user1.sentreqs.length > 100) {
-        setPhoneError("You have already sent a request");
-        return;
-      }
-    } else {
-      if (user1.rentbooks.length > 200) {
-        setPhoneError("You can only rent at most three books");
-        return;
-      }
-      if (user1.sentreqs.length > 0 && user1.rentbooks.length > 1) {
-        setPhoneError("You have already reached request limits");
-        return;
-      }
-      if (user1.sentreqs.length > 1 && user1.rentbooks.length > 0) {
-        setPhoneError("You have already reached request limits");
-        return;
-      }
-    }
-
-    if (!tag) {
-      setPhoneError(
-        "Sorry, The book is not available, please check again later"
-      );
+    // A user can rent at most three books at a time
+    if (
+      Number(user1.rentrequests.length) + Number(user1.rentbooks.length) >
+      3
+    ) {
+      setError("Rent Limit Reached");
       return;
     }
+    // Means the book is not available in warhouse
+    if (!tag) {
+      setError("Sorry, The book is not available, please check again later");
+      return;
+    }
+
     try {
-      await sendRentRequest({ book, tag, duration, cost, user1, phone });
+      await sendRentRequest({ book, tag, duration, cost, user, phone });
       alert("Rent Request Successful");
+      // redirect("#");
       setShowPopup(false);
     } catch (error) {
       console.log(error);
       const errors = error.response ? error.response.data.errors : {};
-      if (errors.borrowerphone) setPhoneError(errors.borrowerphone.msg);
+      if (errors.borrowerphone) setError(errors.borrowerphone.msg);
     }
   }
 
   // Checking if a book is available for rent
   const checkAvailability = () => {
-    return book.tags.find((tag) => tag.isAvailable === true);
+    return book.tags.find(
+      (tag) => tag.isAvailable === true && tag.isStored === true
+    );
+  };
+
+  const handleRent = () => {
+    if (Number(user.collateral) >= 200) togglePopup();
+    else {
+      setPaycollateral(true);
+    }
   };
 
   // Showing the popup window
@@ -108,7 +104,7 @@ export default function RentTheBook({ user, book, setShowPopup }) {
   return (
     <>
       <button
-        onClick={togglePopup}
+        onClick={handleRent}
         style={{
           padding: 5,
           margin: 5,
@@ -118,6 +114,9 @@ export default function RentTheBook({ user, book, setShowPopup }) {
       >
         Rent
       </button>
+      {paycollateral && (
+        <PayCollateral user={user} setPaycollateral={setPaycollateral} />
+      )}
 
       {rentPopup && (
         <div className="popup">
@@ -132,10 +131,7 @@ export default function RentTheBook({ user, book, setShowPopup }) {
             <p>Title: {book.title}</p>
             <p>Author: {book.data.author}</p>
             <p>Price: {price}</p>
-            <p>
-              Is Available:{" "}
-              {checkAvailability() ? "Available" : "Not Available"}
-            </p>
+            <p>Status: {checkAvailability() ? "Available" : "Not Available"}</p>
             <br />
             <p>Rent Duration on days: </p>
             <input
@@ -157,29 +153,12 @@ export default function RentTheBook({ user, book, setShowPopup }) {
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
-                setPhoneError("");
+                setError("");
               }}
               style={{ padding: 3 }}
             />
-            {phoneError && (
-              <p style={{ color: "red", padding: 3, width: 300 }}>
-                {phoneError}
-              </p>
-            )}
-            {limit == "FreeCollateralLimitCrossed" && (
-              <div
-                style={{
-                  width: "300px",
-                  paddingTop: "10px",
-                  paddingBottom: "10px",
-                }}
-              >
-                <p style={{ color: "red" }}>
-                  You have already rented 2 books so You should pay 100 taka as
-                  Collateral first
-                </p>
-                <button style={{ padding: "3px" }}>Pay Collateral</button>
-              </div>
+            {error && (
+              <p style={{ color: "red", padding: 3, width: 300 }}>{error}</p>
             )}
             <br />
             <br />

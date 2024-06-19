@@ -4,7 +4,7 @@ import "../styles/InfoPageModule.css";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-// Displaying each rent requests
+// Displaying each store requests as single row
 function BookInfo({ storeReq, index, isSelected, onSelect }) {
   return (
     <>
@@ -47,14 +47,6 @@ export default function StoreRequests({ user }) {
     }
   }, [user]);
 
-  //   function handleRowSelect(bookid) {
-  //     if (selectedRows.includes(bookid)) {
-  //       setSelectedRows(selectedRows.filter((id) => id !== bookid));
-  //     } else {
-  //       setSelectedRows([...selectedRows, bookid]);
-  //     }
-  //   }
-
   function handleRowSelect(bookid, ownerid) {
     const isSelected = selectedRows.some((row) => row.bookid === bookid);
     if (isSelected) {
@@ -63,15 +55,6 @@ export default function StoreRequests({ user }) {
       setSelectedRows([...selectedRows, { bookid, ownerid }]);
     }
   }
-
-  //   async function handleAction() {
-  //     const updatedStoreReqs = storeReqs.filter(
-  //       (storeReq) => !selectedRows.includes(storeReq.bookid)
-  //     );
-  //     await axios.post(`${apiUrl}/admin/storereqs`, selectedRows);
-  //     setStoreReqs(updatedStoreReqs);
-  //     setSelectedRows([]);
-  //   }
 
   async function handleAction() {
     const selectedBookIds = selectedRows.map((row) => row.bookid);

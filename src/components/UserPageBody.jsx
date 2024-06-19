@@ -29,7 +29,7 @@ export default function UserPageBody({ user }) {
   }
 
   return (
-    <div>
+    <div className="user-page-body">
       <div className="user-container">
         {user &&
           (user.avatar ? (
@@ -53,13 +53,14 @@ export default function UserPageBody({ user }) {
           ) : (
             <div
               style={{
-                height: 200,
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "left",
+                textAlign: "left",
+                margin: "50px 20px 0px 0px",
               }}
             >
-              {user && <h2>{user.name}</h2>}
+              {user && <h3>{user.name}</h3>}
               {user && (
                 <h3 style={{ fontSize: 14, color: "blue" }}>{user.email}</h3>
               )}
@@ -73,56 +74,56 @@ export default function UserPageBody({ user }) {
           )}
         </div>
       </div>
-      <div className="content-container">
-        {!isEditing && (
-          <div>
-            <div style={{ padding: 30 }}>
-              <h2>My Books</h2>
-              <div id="user-books-container">
-                {mybooks &&
-                  mybooks.map((bookid) => (
-                    <Book
-                      key={bookid}
-                      bookid={bookid}
-                      user={user}
-                      parent="userbooks"
-                      onDelete={handleDeleteMyBook}
-                    />
-                  ))}
-              </div>
-            </div>
-            <div style={{ padding: 30 }}>
-              <h2>Addcart Books</h2>
-              <div id="user-books-container">
-                {cartbooks &&
-                  cartbooks.map((bookid) => (
-                    <Book
-                      key={bookid}
-                      bookid={bookid}
-                      user={user}
-                      parent="adcartbooks"
-                      onDelete={handleDeleteCarts}
-                    />
-                  ))}
-              </div>
-            </div>
-            <div style={{ padding: 30 }}>
-              <h2>Rent Books</h2>
-              <div id="user-books-container">
-                {user &&
-                  user.rentbooks.map((bookid) => (
-                    <Book
-                      key={bookid}
-                      bookid={bookid}
-                      user={user}
-                      parent="rentbooks"
-                    />
-                  ))}
-              </div>
-            </div>
+      {!isEditing && (
+        <div id="mybooks-container" style={{ padding: 30 }}>
+          <h2>My Books</h2>
+          <div id="user-books-container">
+            {mybooks &&
+              mybooks.map((bookid) => (
+                <Book
+                  key={bookid}
+                  bookid={bookid}
+                  user={user}
+                  parent="userbooks"
+                  onDelete={handleDeleteMyBook}
+                />
+              ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+      {!isEditing && (
+        <div id="adcartbooks-container" style={{ padding: 30 }}>
+          <h2>Addcart Books</h2>
+          <div id="user-books-container">
+            {cartbooks &&
+              cartbooks.map((bookid) => (
+                <Book
+                  key={bookid}
+                  bookid={bookid}
+                  user={user}
+                  parent="adcartbooks"
+                  onDelete={handleDeleteCarts}
+                />
+              ))}
+          </div>
+        </div>
+      )}
+      {!isEditing && (
+        <div id="rentbooks-container" style={{ padding: 30 }}>
+          <h2>Rent Books</h2>
+          <div id="user-books-container">
+            {user &&
+              user.rentbooks.map((bookid) => (
+                <Book
+                  key={bookid}
+                  bookid={bookid}
+                  user={user}
+                  parent="rentbooks"
+                />
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
