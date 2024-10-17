@@ -9,6 +9,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function SignupForm() {
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [address, setAddress] = useState("");
@@ -17,6 +18,7 @@ export default function SignupForm() {
   const [agreed, setAgreed] = useState(false); // State variable for checkbox
 
   const [nameError, setNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [addressError, setAddressError] = useState("");
@@ -45,6 +47,7 @@ export default function SignupForm() {
 
     const formData = {
       name: name,
+      mobile: phone,
       email: email,
       password: password,
       address: address,
@@ -62,6 +65,7 @@ export default function SignupForm() {
 
         // Clear form fields (optional)
         setName("");
+        setPhone("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
@@ -73,6 +77,9 @@ export default function SignupForm() {
 
         if (errors.name) {
           setNameError(errors.name.msg);
+        }
+        if (errors.mobile) {
+          setPhoneError(errors.mobile.msg);
         }
         if (errors.email) {
           setEmailError(errors.email.msg);
@@ -109,6 +116,18 @@ export default function SignupForm() {
             }}
           />
           {nameError && <span>{nameError}</span>}
+        </ul>
+        <ul>
+          <input
+            type="text"
+            placeholder="Enter phone"
+            value={phone}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              setPhoneError("");
+            }}
+          />
+          {phoneError && <span>{phoneError}</span>}
         </ul>
         <ul>
           <input

@@ -35,13 +35,18 @@ function Notification({ notify_id, onDelete }) {
 
   return (
     <div id="notify_card">
-      <h3>Hello...</h3>
-      <p>Title: {notification.title}</p>
+      <h3>{notification.title}</h3>
       <p>Message: {notification.message}</p>
       <br />
       <button
         onClick={() => deleteNotification(notification._id)}
-        style={{ color: "red", padding: 3, borderRadius: 10, float: "right" }}
+        style={{
+          color: "red",
+          padding: 3,
+          borderRadius: 10,
+          margin: 10,
+          float: "right",
+        }}
       >
         delete
       </button>

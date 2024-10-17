@@ -67,10 +67,26 @@ function Rent({ rent_id, onDelete }) {
     }
   }
 
+  function formatDate(isoString, dur) {
+    // Parse the ISO 8601 string into a Date object
+    const date = new Date(isoString);
+
+    // Add 4 hours to the date
+    date.setHours(date.getHours() + 4 + dur * 24);
+
+    // Format the date in yy/mm/dd format
+    const year = date.getFullYear().toString().slice(-2); // Get the last two digits of the year
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    // Pad month with leading zero if needed
+    const day = date.getDate().toString().padStart(2, "0"); // Pad day with leading zero if needed
+
+    return `${year}/${month}/${day}`;
+  }
+
   return (
-    <div style={{ paddingLeft: "5px" }}>
+    <div className="rent_card">
       {rent && (
-        <table className="table" style={{ width: "750px" }}>
+        <table className="table">
           <thead>
             <tr>
               <th scope="col">
@@ -148,10 +164,12 @@ function Rent({ rent_id, onDelete }) {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Start Date: {rent.startdate}</th>
+                      <th>Start Date: {formatDate(rent.startdate, 0)}</th>
                     </tr>
                     <tr>
-                      <th>End Date: {rent.enddate}</th>
+                      <th>
+                        End Date: {formatDate(rent.startdate, rent.duration)}
+                      </th>
                     </tr>
                   </thead>
                   {rent && rent.status === "accepted" && (

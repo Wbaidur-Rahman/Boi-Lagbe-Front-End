@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "../components/Layout";
 
 import Notifications from "../components/Notifications";
+import PaymentInfo from "../components/PaymentInfo";
 import RentRequests from "../components/RentRequests";
 import Rents from "../components/Rents";
 import StoreRequests from "../components/StoreRequests";
@@ -17,6 +18,7 @@ export default function InfoPage() {
   const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
   const infotype = queryParams.get("type");
+  const tran_id = queryParams.get("tranid");
 
   const [user, setUser] = useState(null);
   const [userid, setUserId] = useState(null);
@@ -68,6 +70,9 @@ export default function InfoPage() {
       {infotype === "notify" && <Notifications user={user} />}
       {infotype === "rent" && <Rents user={user} />}
       {infotype === "storereqs" && <StoreRequests user={user} />}
+      {infotype === "payment_success" && (
+        <PaymentInfo user={user} tran_id={tran_id} />
+      )}
     </div>
   );
 }

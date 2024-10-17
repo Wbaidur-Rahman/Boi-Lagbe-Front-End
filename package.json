@@ -14,6 +14,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.4",
     "axios": "^1.6.7",
+    "boi-lagbe-front-end": "file:",
     "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
     "react": "^18.2.0",
